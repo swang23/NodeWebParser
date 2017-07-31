@@ -1,0 +1,19 @@
+source/.classpath
+source/.project
+source/.settings/
+source/target/
+<<<<<<< HEAD
+.project
+=======
+source/.idea/
+source/*.iml
+source/*.log
+source/*.jpg
+source/*/*.jpg
+source/*.ser
+>>>>>>> develop
+
+source/*/out.png
+Fortifyportfolioservice.*
+.metadata/*
+.idea/
