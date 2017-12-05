@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Home</title>
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0">
+	<link rel="stylesheet" href="../css/ui-base.css">
+	<link rel="stylesheet" href="../css/common.css">
+	<link rel="stylesheet" href="../css/home.css">
+</head>
+<body>
+	<div id="main">
+		<div class="title-bar">
+			<div class="ub ub-ac h-44 padl-15 padr-15 top">
+				<div class="tx-wh ub ub-f1" v-on:click="changePage(1)">今日要闻</div>
+				<div class="tx-wh ub ub-f1 ub-pc" v-on:click="changePage(2)">高清美图</div>
+				<div class="tx-wh ub ub-f1 ub-pe" v-on:click="changePage(3)">精选视频</div>
+			</div>
+		</div>
+		<div class="w-100p mart-40 padt-5" v-if="pageTwo">
+			<div class="imgBlock bg-wh mart-15 marl-15 bort-gra-1" v-bind:style="{ width: imgWidth }" v-for="img in imgs">
+				<img v-bind:src="img.imgPath" alt="">
+				<div class="ub ub-ac h-50 padl-15 padr-15 text-box">{{img.message}}</div>
+			</div>
+		</div>
+		<div class="ub padl-10 padr-10 bg-wh ub-ver mart-44" v-if="pageOne">
+			<div class="ub padt-10 padb-10 borb-gra-1 item" v-for="item in items">
+				<div class="w-90 h-70 marr-15" style="background: url({{item.img}}); background-size: 100% 100%"></div>
+				<div class="ub ub-f1 ub-ver">
+					<a class="h-50 text" href={{item.url}}>{{item.text}}</a>
+					<div class="h-20 ub ub-ac ub-pe">
+						<div>{{item.num}}</div>
+						<div class=""></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</body>
+<script src="../js/jquery-2.2.1.min.js"></script>
+<script src="../js/vue.js"></script>
+<script src="../js/home.js"></script>
+</html>
