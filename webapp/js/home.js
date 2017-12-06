@@ -65,7 +65,7 @@ var vm = new Vue({
 			}
 			$this.working = true;
 			$.ajax({
-				url: 'http://192.168.0.106:8081/getData',
+				url: 'http://10.86.16.51:8081/getData',
 				type: 'POST',
 				data: {
 					num: $this.num,
@@ -84,8 +84,8 @@ var vm = new Vue({
 					}
 					$this.num++;
 					$this.working = false;
-					localStorage.items=JSON.stringify($this.items);
-					localStorage.num=$this.num;
+					//localStorage.items=JSON.stringify($this.items);
+					//localStorage.num=$this.num;
 				}
 			})
 		}
@@ -94,16 +94,16 @@ var vm = new Vue({
 		var $this = this;
 		var width = document.body.clientWidth;
 		$this.imgWidth = (width-45)/2+"px";
-		if(localStorage.num!=undefined&&localStorage.num!=null){
-			$this.items = JSON.parse(localStorage.items);
-			$this.num = localStorage.num;
-			window.onscroll=function(){
-		        if( $this.ifBottom() ){
-		            $this.load();
-		        }
-	    	}
-			return;
-		}
+		//if(localStorage.num!=undefined&&localStorage.num!=null){
+		//	$this.items = JSON.parse(localStorage.items);
+		//	$this.num = localStorage.num;
+		//	window.onscroll=function(){
+		//        if( $this.ifBottom() ){
+		//            $this.load();
+		//        }
+	    //	}
+		//	return;
+		//}
 		$this.load();
 		window.onscroll=function(){
 	        if( $this.ifBottom() ){
