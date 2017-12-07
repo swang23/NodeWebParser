@@ -32,6 +32,9 @@ app.post('/getData', function (req, res) {
 					var sourceUrl = titleElement.attr("href");
 					var textElement = $(".post_item_summary").eq(i);
 					var text = textElement.text();
+					if(!text.match("爬虫")){
+						continue;
+					}
 					var Element = $(".post_item_summary").eq(i);
 					var coverElement = Element.find('img');
 					var cover = "";
@@ -59,6 +62,30 @@ app.post('/getData', function (req, res) {
 			var time = endTime-startTime;
 			console.log(time);
 		});
+	});
+})
+
+app.post('/getZhihuData', function (req, res) {
+	req.on('data', function(data) {
+		var currentData = ""+data;
+		var tempData = qs.parse(currentData);
+		var index = tempData.num;
+		console.log(tempData.num);
+		
+		var postData = [];
+		var startTime = new Date().getTime();
+		
+		var url = "https://mswiki.morningstar.com/display/DCT/DAP";
+		superagent.get(url).end(function(err,pre){
+			console.log(pre.text);
+			var $ = cheerio.load(pre.text);
+			console.log($(".Card TopstoryItem TopstoryItem--experimentExpand").length);
+		})
+		res.header("Access-Control-Allow-Origin", "*");
+		res.json({
+			success: 1,
+			ret: postData
+		})
 	});
 })
 

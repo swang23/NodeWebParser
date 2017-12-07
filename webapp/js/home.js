@@ -5,9 +5,13 @@ var vm = new Vue({
 		pageOne: true,
 		pageTwo: false,
 		imgWidth: "",
-		pageNum: 1,
-		num: 1,
+		pageNum: 1,//一共有三页，对应页面头部三种分类
+		num: 1,//第一页下面数据的页数
+		zNum: 1,//第二页内数据的页数
 		working: false,
+		scroll1:0,
+		scroll2:0,
+		scroll3:0,
 		imgs: [
 			{
 				message: "nihao",
@@ -30,13 +34,13 @@ var vm = new Vue({
 			var scrollHeight=document.documentElement.scrollTop||document.body.scrollTop;
     		var pageHeight=document.documentElement.clientHeight||document.body.clientHeight;
     		var dis = 0;
-    		if( $(".item")[$(".item").length-1]==undefined ){
-    			return;
+    		if( $(".item")[$(".item").length-1]==undefined||$(".imgBlock")[$(".imgBlock").length-1]==undefined ){
+    			return 1;
     		}
     		if( $this.pageNum==1 ){
-    			var dis = $(".item")[$(".item").length-1].offsetTop;
+    			dis = $(".item")[$(".item").length-1].offsetTop;
     		}else if( $this.pageNum==2 ){
-    			var dis = $(".imgBlock")[$(".imgBlock").length-1].offsetTop;	
+    			dis = $(".imgBlock")[$(".imgBlock").length-1].offsetTop+$(".imgBlock").eq(0).height();
     		}
 			if( (scrollHeight+pageHeight)>dis ){
 				return 1;
@@ -44,18 +48,42 @@ var vm = new Vue({
 		},
 		changePage: function($index){
 			var $this = this;
-			$this.pageNum = $index;
+			$this.setScroll($index);	
 			switch($index){
 				case 1:
 					$this.pageOne = true;
 					$this.pageTwo = false;
+					$this.pageNum = $index;
+					setTimeout(function(){
+						document.documentElement.scrollTop = $this.scroll1;
+					},0);
 					break;
 				case 2:
 					$this.pageOne = false;
 					$this.pageTwo = true;
+					$this.pageNum = $index;
+					if( $this.zNum==1 ){
+						$this.load();
+					}
+					setTimeout(function(){
+						document.documentElement.scrollTop = $this.scroll2;
+					},0);
 					break;
 				case 3:
 					break;
+			}
+		},
+		setScroll: function($index){
+			var $this = this;
+			if($index!=$this.pageNum){
+				switch($this.pageNum){
+					case 1:
+						$this.scroll1 = document.documentElement.scrollTop;
+						break;
+					case 2:
+						$this.scroll2 = document.documentElement.scrollTop;
+						break;
+				}
 			}
 		},
 		load: function(){
@@ -64,30 +92,65 @@ var vm = new Vue({
 				return;
 			}
 			$this.working = true;
-			$.ajax({
-				url: 'http://10.86.16.51:8081/getData',
-				type: 'POST',
-				data: {
-					num: $this.num,
-				},
-				success: function(data){
-					var tempData = data.ret;
-					for( var i = 0; i < tempData.length; i++ ){
-						var tempItem = {
-							img: tempData[i].itemCover,
-							text: tempData[i].itemText,
-							num: "139",
-							title: tempData[i].itemTitle,
-							url: tempData[i].itemLink
+			alert($this.pageNum);
+			switch($this.pageNum){
+				case 1:
+					$.ajax({
+						url: 'http://10.86.16.51:8081/getData',
+						type: 'POST',
+						data: {
+							num: $this.num,
+						},
+						success: function(data){
+							var tempData = data.ret;
+							for( var i = 0; i < tempData.length; i++ ){
+								var tempItem = {
+									img: tempData[i].itemCover,
+									text: tempData[i].itemText,
+									num: "139",
+									title: tempData[i].itemTitle,
+									url: tempData[i].itemLink
+								}
+								$this.items.push(tempItem);
+							}
+							$this.num++;
+							$this.working = false;
+							//localStorage.items=JSON.stringify($this.items);
+							//localStorage.num=$this.num;
 						}
-						$this.items.push(tempItem);
-					}
-					$this.num++;
-					$this.working = false;
-					//localStorage.items=JSON.stringify($this.items);
-					//localStorage.num=$this.num;
-				}
-			})
+					})
+					break;
+				case 2:
+					$.ajax({
+						url: 'http://10.86.16.51:8081/getZhihuData',
+						type: 'POST',
+						data: {
+							num: $this.zNum,
+						},
+						success: function(data){
+							alert(JSON.stringify(data));
+							var tempData = data.ret;
+							//for( var i = 0; i < tempData.length; i++ ){
+							//	var tempItem = {
+							//		img: tempData[i].itemCover,
+							//		text: tempData[i].itemText,
+							//		num: "139",
+							//		title: tempData[i].itemTitle,
+							//		url: tempData[i].itemLink
+							//	}
+							//	$this.items.push(tempItem);
+							//}
+							$this.zNum++;
+							$this.working = false;
+							//localStorage.items=JSON.stringify($this.items);
+							//localStorage.num=$this.num;
+						}
+					})
+					break;
+				case 3:
+					break;
+			}
+			
 		}
 	},
 	ready: function(){
@@ -107,6 +170,7 @@ var vm = new Vue({
 		$this.load();
 		window.onscroll=function(){
 	        if( $this.ifBottom() ){
+				alert("load");
 	            $this.load();
 	        }
     	}
