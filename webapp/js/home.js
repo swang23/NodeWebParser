@@ -92,7 +92,6 @@ var vm = new Vue({
 				return;
 			}
 			$this.working = true;
-			alert($this.pageNum);
 			switch($this.pageNum){
 				case 1:
 					$.ajax({
@@ -170,7 +169,6 @@ var vm = new Vue({
 		$this.load();
 		window.onscroll=function(){
 	        if( $this.ifBottom() ){
-				alert("load");
 	            $this.load();
 	        }
     	}
