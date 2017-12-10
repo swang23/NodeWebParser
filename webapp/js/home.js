@@ -12,21 +12,7 @@ var vm = new Vue({
 		scroll1:0,
 		scroll2:0,
 		scroll3:0,
-		imgs: [
-			{
-				message: "nihao",
-				imgPath: "../img/01(1).jpg",
-			},{
-				message: "nihao",
-				imgPath: "../img/01(1).jpg",
-			},{
-				message: "nihao",
-				imgPath: "../img/01(1).jpg",
-			},{
-				message: "nihao",
-				imgPath: "../img/01(1).jpg",
-			},
-		],
+		imgs: [],
 	},
 	methods: {
 		ifBottom: function(){
@@ -34,7 +20,7 @@ var vm = new Vue({
 			var scrollHeight=document.documentElement.scrollTop||document.body.scrollTop;
     		var pageHeight=document.documentElement.clientHeight||document.body.clientHeight;
     		var dis = 0;
-    		if( $(".item")[$(".item").length-1]==undefined||$(".imgBlock")[$(".imgBlock").length-1]==undefined ){
+    		if( $(".item")[$(".item").length-1]==undefined&&$(".imgBlock")[$(".imgBlock").length-1]==undefined ){
     			return 1;
     		}
     		if( $this.pageNum==1 ){
@@ -55,7 +41,7 @@ var vm = new Vue({
 					$this.pageTwo = false;
 					$this.pageNum = $index;
 					setTimeout(function(){
-						document.documentElement.scrollTop = $this.scroll1;
+						document.body.scrollTop = $this.scroll1;
 					},0);
 					break;
 				case 2:
@@ -66,7 +52,7 @@ var vm = new Vue({
 						$this.load();
 					}
 					setTimeout(function(){
-						document.documentElement.scrollTop = $this.scroll2;
+						document.body.scrollTop = $this.scroll2;
 					},0);
 					break;
 				case 3:
@@ -78,10 +64,10 @@ var vm = new Vue({
 			if($index!=$this.pageNum){
 				switch($this.pageNum){
 					case 1:
-						$this.scroll1 = document.documentElement.scrollTop;
+						$this.scroll1 = document.body.scrollTop;
 						break;
 					case 2:
-						$this.scroll2 = document.documentElement.scrollTop;
+						$this.scroll2 = document.body.scrollTop;
 						break;
 				}
 			}
@@ -95,7 +81,7 @@ var vm = new Vue({
 			switch($this.pageNum){
 				case 1:
 					$.ajax({
-						url: 'http://10.86.16.51:8081/getData',
+						url: 'http://192.168.0.106:8081/getData',
 						type: 'POST',
 						data: {
 							num: $this.num,
@@ -114,31 +100,38 @@ var vm = new Vue({
 							}
 							$this.num++;
 							$this.working = false;
-							//localStorage.items=JSON.stringify($this.items);
-							//localStorage.num=$this.num;
+							localStorage.items=JSON.stringify($this.items);
+							localStorage.num=$this.num;
 						}
 					})
 					break;
 				case 2:
 					$.ajax({
-						url: 'http://10.86.16.51:8081/getZhihuData',
+						url: 'http://192.168.0.106:8081/getZhihuData',
 						type: 'POST',
 						data: {
 							num: $this.zNum,
 						},
 						success: function(data){
-							alert(JSON.stringify(data));
-							var tempData = data.ret;
-							//for( var i = 0; i < tempData.length; i++ ){
-							//	var tempItem = {
-							//		img: tempData[i].itemCover,
-							//		text: tempData[i].itemText,
-							//		num: "139",
-							//		title: tempData[i].itemTitle,
-							//		url: tempData[i].itemLink
-							//	}
-							//	$this.items.push(tempItem);
-							//}
+							var strData = data.ret.value;
+							var objData = JSON.parse(strData);
+							var tempData = objData.data;
+							for( var i = 0; i < tempData.length; i++ ){
+								if(tempData[i].target==null||tempData[i].target==undefined||tempData[i].target.question==undefined){
+									continue;
+								}
+								var itemText = tempData[i].target.excerpt;
+								var itemAnswerId = tempData[i].target.id;
+								var itemQuestionId = tempData[i].target.question.id;
+								var itemUrl = "https://www.zhihu.com/question/"+itemQuestionId+"/answer/"+itemAnswerId;
+								var title = tempData[i].target.question.title;
+								var tempItem = {
+									text: itemText,
+									url: itemUrl,
+									title: title,
+								}
+								$this.imgs.push(tempItem);
+							}
 							$this.zNum++;
 							$this.working = false;
 							//localStorage.items=JSON.stringify($this.items);
@@ -156,16 +149,16 @@ var vm = new Vue({
 		var $this = this;
 		var width = document.body.clientWidth;
 		$this.imgWidth = (width-45)/2+"px";
-		//if(localStorage.num!=undefined&&localStorage.num!=null){
-		//	$this.items = JSON.parse(localStorage.items);
-		//	$this.num = localStorage.num;
-		//	window.onscroll=function(){
-		//        if( $this.ifBottom() ){
-		//            $this.load();
-		//        }
-	    //	}
-		//	return;
-		//}
+		if(localStorage.num!=undefined&&localStorage.num!=null){
+			$this.items = JSON.parse(localStorage.items);
+			$this.num = localStorage.num;
+			window.onscroll=function(){
+		       if( $this.ifBottom() ){
+		           $this.load();
+		       }
+	    	}
+			return;
+		}
 		$this.load();
 		window.onscroll=function(){
 	        if( $this.ifBottom() ){

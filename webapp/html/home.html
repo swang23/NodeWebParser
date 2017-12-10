@@ -18,9 +18,9 @@
 			</div>
 		</div>
 		<div class="w-100p mart-40 padt-5" v-if="pageTwo">
-			<div class="imgBlock bg-wh mart-15 marl-15 bort-gra-1" v-bind:style="{ width: imgWidth }" v-for="img in imgs">
-				<img v-bind:src="img.imgPath" alt="">
-				<div class="ub ub-ac h-50 padl-15 padr-15 text-box">{{img.message}}</div>
+			<div class="imgBlock bg-wh mart-15 marl-15 bort-gra-1 padt-10 padb-5" v-bind:style="{ width: imgWidth }" v-for="img in imgs">
+				<a class="ub padl-15 padr-15 text-box" href={{img.url}}>{{img.title}}</a>
+				<div class="ub padl-15 padr-15 text-box-text padt-5">{{img.text}}</div>
 			</div>
 		</div>
 		<div class="ub padl-10 padr-10 bg-wh ub-ver mart-44" v-if="pageOne">
