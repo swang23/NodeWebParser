@@ -99,6 +99,7 @@ app.post('/getZhihuData', function (req, res) {
 			var tempData = {
 				value: obj.text,
 			};
+			res.header("Access-Control-Allow-Origin", "*");
 			res.json({
 				success: 1,
 				ret: tempData

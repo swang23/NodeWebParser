@@ -81,7 +81,7 @@ var vm = new Vue({
 			switch($this.pageNum){
 				case 1:
 					$.ajax({
-						url: 'http://192.168.0.106:8081/getData',
+						url: 'http://10.86.16.51:8081/getData',
 						type: 'POST',
 						data: {
 							num: $this.num,
@@ -107,7 +107,7 @@ var vm = new Vue({
 					break;
 				case 2:
 					$.ajax({
-						url: 'http://192.168.0.106:8081/getZhihuData',
+						url: 'http://10.86.16.51:8081/getZhihuData',
 						type: 'POST',
 						data: {
 							num: $this.zNum,

@@ -19,7 +19,9 @@
 	clear: both;
 }
 .text-box{
+	height: 50px;
 	font-size: 21px;
+	line-height: 25px;
     word-break: break-all;
     text-overflow: ellipsis;
     display: -webkit-box; /** 对象作为伸缩盒子模型显示 **/
@@ -28,8 +30,9 @@
     overflow: hidden;  /** 隐藏超出的内容 **/
 }
 .text-box-text{
-	height: 95px;
+	height: 100px;
 	font-size: 16px;
+	line-height: 20px;
     word-break: break-all;
     text-overflow: ellipsis;
     display: -webkit-box; /** 对象作为伸缩盒子模型显示 **/
@@ -40,6 +43,7 @@
 .text{
 	height: 48px;
 	font-size: 22px;
+	line-height: 25px;
     word-break: break-all;
     text-overflow: ellipsis;
     display: -webkit-box; /** 对象作为伸缩盒子模型显示 **/
