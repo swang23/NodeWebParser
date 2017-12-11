@@ -1,9 +1,6 @@
 var express = require('express');
 var superagent = require('superagent');
 var qs = require("querystring");
-var http = require('http');
-var request = require('request');
-var fs = require('fs');
 var cheerio = require('cheerio');
 var eventproxy = require('eventproxy');
 var ep = new eventproxy();
@@ -33,14 +30,15 @@ app.post('/getData', function (req, res) {
 					var sourceUrl = titleElement.attr("href");
 					var textElement = $(".post_item_summary").eq(i);
 					var text = textElement.text();
-					// if(!text.match("爬虫")){
-					// 	continue;
-					// }
 					var Element = $(".post_item_summary").eq(i);
 					var coverElement = Element.find('img');
 					var cover = "";
 					if( coverElement!=undefined&&coverElement!=null ){
-						cover = "https:"+coverElement.attr("src");
+						if( coverElement.attr("src")==undefined ){
+							cover = undefined;
+						}else{
+							cover = "https:"+coverElement.attr("src");
+						}
 					}
 					var tempData = {
 						itemTitle: title,

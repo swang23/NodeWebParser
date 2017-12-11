@@ -4,7 +4,7 @@ var vm = new Vue({
 		items:[],
 		pageOne: true,
 		pageTwo: false,
-		imgWidth: "",
+		blockWidth: "",
 		pageNum: 1,//一共有三页，对应页面头部三种分类
 		num: 1,//第一页下面数据的页数
 		zNum: 1,//第二页内数据的页数
@@ -12,7 +12,8 @@ var vm = new Vue({
 		scroll1:0,
 		scroll2:0,
 		scroll3:0,
-		imgs: [],
+		boxs: [],
+		loading: false,
 	},
 	methods: {
 		ifBottom: function(){
@@ -20,13 +21,13 @@ var vm = new Vue({
 			var scrollHeight=document.documentElement.scrollTop||document.body.scrollTop;
     		var pageHeight=document.documentElement.clientHeight||document.body.clientHeight;
     		var dis = 0;
-    		if( $(".item")[$(".item").length-1]==undefined&&$(".imgBlock")[$(".imgBlock").length-1]==undefined ){
+    		if( $(".item")[$(".item").length-1]==undefined&&$(".block")[$(".block").length-1]==undefined ){
     			return 1;
     		}
     		if( $this.pageNum==1 ){
     			dis = $(".item")[$(".item").length-1].offsetTop;
     		}else if( $this.pageNum==2 ){
-    			dis = $(".imgBlock")[$(".imgBlock").length-1].offsetTop+$(".imgBlock").eq(0).height();
+    			dis = $(".block")[$(".block").length-1].offsetTop+$(".imgBlock").eq(0).height();
     		}
 			if( (scrollHeight+pageHeight)>dis ){
 				return 1;
@@ -77,11 +78,12 @@ var vm = new Vue({
 			if($this.working){
 				return;
 			}
+			$this.loading = true;
 			$this.working = true;
 			switch($this.pageNum){
 				case 1:
 					$.ajax({
-						url: 'http://10.86.16.51:8081/getData',
+						url: 'http://192.168.0.106:8081/getData',
 						type: 'POST',
 						data: {
 							num: $this.num,
@@ -91,6 +93,7 @@ var vm = new Vue({
 							for( var i = 0; i < tempData.length; i++ ){
 								var tempItem = {
 									img: tempData[i].itemCover,
+									hasImg: tempData[i].itemCover==undefined?false:true,
 									text: tempData[i].itemText,
 									num: "139",
 									title: tempData[i].itemTitle,
@@ -100,14 +103,15 @@ var vm = new Vue({
 							}
 							$this.num++;
 							$this.working = false;
-							localStorage.items=JSON.stringify($this.items);
-							localStorage.num=$this.num;
+							$this.loading = false;
+							// localStorage.items=JSON.stringify($this.items);
+							// localStorage.num=$this.num;
 						}
 					})
 					break;
 				case 2:
 					$.ajax({
-						url: 'http://10.86.16.51:8081/getZhihuData',
+						url: 'http://192.168.0.106:8081/getZhihuData',
 						type: 'POST',
 						data: {
 							num: $this.zNum,
@@ -130,10 +134,11 @@ var vm = new Vue({
 									url: itemUrl,
 									title: title,
 								}
-								$this.imgs.push(tempItem);
+								$this.boxs.push(tempItem);
 							}
 							$this.zNum++;
 							$this.working = false;
+							$this.loading = false;
 							//localStorage.items=JSON.stringify($this.items);
 							//localStorage.num=$this.num;
 						}
@@ -142,23 +147,22 @@ var vm = new Vue({
 				case 3:
 					break;
 			}
-			
 		}
 	},
 	ready: function(){
 		var $this = this;
 		var width = document.body.clientWidth;
-		$this.imgWidth = (width-45)/2+"px";
-		if(localStorage.num!=undefined&&localStorage.num!=null){
-			$this.items = JSON.parse(localStorage.items);
-			$this.num = localStorage.num;
-			window.onscroll=function(){
-		       if( $this.ifBottom() ){
-		           $this.load();
-		       }
-	    	}
-			return;
-		}
+		$this.blockWidth = (width-45)/2+"px";
+		// if(localStorage.num!=undefined&&localStorage.num!=null){
+		// 	$this.items = JSON.parse(localStorage.items);
+		// 	$this.num = localStorage.num;
+		// 	window.onscroll=function(){
+		//        if( $this.ifBottom() ){
+		//            $this.load();
+		//        }
+	 //    	}
+		// 	return;
+		// }
 		$this.load();
 		window.onscroll=function(){
 	        if( $this.ifBottom() ){

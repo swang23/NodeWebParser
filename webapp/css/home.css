@@ -11,12 +11,15 @@
 .cover{
 	background: url(../img/01.jpg);
 }
-.imgBlock{
+.block{
 	position: relative;
 	float: left;
 }
 .clear{
 	clear: both;
+}
+.touchItem:active{
+	background: #ccc;
 }
 .text-box{
 	height: 50px;
@@ -41,8 +44,8 @@
     overflow: hidden;  /** 隐藏超出的内容 **/
 }
 .text{
-	height: 48px;
-	font-size: 22px;
+	height: 50px;
+	font-size: 16px;
 	line-height: 25px;
     word-break: break-all;
     text-overflow: ellipsis;
@@ -50,4 +53,104 @@
     -webkit-box-orient: vertical; /** 设置或检索伸缩盒对象的子元素的排列方式 **/
     -webkit-line-clamp: 2; /** 显示的行数 **/
     overflow: hidden;  /** 隐藏超出的内容 **/
+}
+.title{
+	height: 30px;
+	font-size: 20px;
+	line-height: 30px;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    display: -webkit-box; /** 对象作为伸缩盒子模型显示 **/
+    -webkit-box-orient: vertical; /** 设置或检索伸缩盒对象的子元素的排列方式 **/
+    -webkit-line-clamp: 1; /** 显示的行数 **/
+    overflow: hidden;  /** 隐藏超出的内容 **/
+}
+@keyframes loading-3{
+    0%{
+        /*background: linear-gradient(transparent 0%);*/
+        opacity: 1;
+        transform: scale(2);
+    }
+    100%{
+        /*background: linear-gradient(transparent 0%,transparent 100%);*/
+        transform: scale(0.5);
+        opacity: 0;
+    }
+}
+    .loading_3{
+        top: -30px;
+        margin: auto;
+        background-color: #000;
+        position: relative;
+    }
+    .loading_3 i{
+        width: 8px;
+        height: 8px;
+        border-radius: 4px;
+        position: absolute;
+        /*clear: both;*/
+        display: block;
+        background-color: black; 
+    }
+    .loading_3 i:nth-child(1){
+        top: 25px;
+        left: 0px;
+        background: red;
+        animation: loading-3 .8s ease-in .1s infinite;
+    }
+    .loading_3 i:nth-child(2){
+        top: 17px;
+        left: 17px;
+        background: #ff6600;
+        animation: loading-3 .8s ease-in .2s infinite;
+    }
+    .loading_3 i:nth-child(3){
+        top: 0px;
+        left: 25px;
+        background: yellow;
+        animation: loading-3 .8s ease-in .3s infinite;
+    }
+    .loading_3 i:nth-child(4){
+        top: -17px;
+        left: 17px;
+        background: green;
+        animation: loading-3 .8s ease-in .4s infinite;
+    }
+    .loading_3 i:nth-child(5){
+        top: -25px;
+        left: 0px;
+        background: #00ffff;
+        animation: loading-3 .8s ease-in .5s infinite;
+    }
+    .loading_3 i:nth-child(6){
+        top: -17px;
+        left: -17px;
+        background: blue;
+        animation: loading-3 .8s ease-in .6s infinite;
+    }
+    .loading_3 i:nth-child(7){
+        top: 0px;
+        left: -25px;
+        background: #ff00ff;
+        animation: loading-3 .8s ease-in .7s infinite;
+}
+.loading_3 i:nth-child(8){
+    top: 17px;
+    left: -17px;
+    background: #ff0099;
+    animation: loading-3 .8s ease-in .8s infinite;
+}
+.loader{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0.1,0.1,0.1,0);
+    border: 1px solid #ccc;
+    float: left; 
+    margin-right: 3%;
+    box-sizing: border-box;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justiy-content: center;
+    z-index: 999;
 }
